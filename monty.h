@@ -39,4 +39,7 @@ extern char *str_value;
 void push(stack_t **stack, unsigned int line_number);
 void pall(stack_t **stack, unsigned int line_number);
 void exec_instruct(char *opcode, stack_t **stack, unsigned int line_number);
+void free_dlistint(stack_t *head);
+stack_t *add_dnodeint(stack_t **head, const int n);
+stack_t *add_dnodeint_end(stack_t **head, const int n);
 #endif

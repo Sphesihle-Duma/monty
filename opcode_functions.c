@@ -8,7 +8,6 @@ void push(stack_t **stack, unsigned int line_number)
 {
 	int int_value;
 	unsigned int i;
-	stack_t *new_node, *top = *stack;
 
 	if (!str_value)
 	{
@@ -18,7 +17,7 @@ void push(stack_t **stack, unsigned int line_number)
 	for (i = 0; i < strlen(str_value); i++)
 	{
 		if (str_value[i] == '-' && i == 0)
-			continue;
+			continue;	
 		else if (!isdigit(str_value[i]))
 		{
 			fprintf(stderr, "l%u:Error: usage: push integer\n", line_number);
@@ -26,18 +25,7 @@ void push(stack_t **stack, unsigned int line_number)
 		}
 	}
 	int_value = atoi(str_value);
-	new_node = malloc(sizeof(stack_t));
-	if (!new_node)
-	{
-		fprintf(stderr, "Error: malloc failed");
-		exit(EXIT_FAILURE);
-	}
-	new_node->n = int_value;
-	new_node->prev = NULL;
-	new_node->next = top;
-	if (top)
-		top->prev = new_node;
-	*stack = new_node;
+	add_dnodeint(stack, int_value);
 }
 
 /**
@@ -47,18 +35,18 @@ void push(stack_t **stack, unsigned int line_number)
  */
 void pall(stack_t **stack, unsigned int line_number)
 {
-	stack_t *temp, *top = *stack;
+	stack_t *top;
 
-	if (!top)
+	if (*stack == NULL || !stack)
 	{
 		fprintf(stderr, "L%u: Error: stack is empty\n", line_number);
 		exit(EXIT_FAILURE);
 	}
+	top = *stack;
 	while (top)
 	{
-		temp = top;
-		free(top);
-		printf("%d\n", temp->n);
-		top = temp->next;
+		printf("%d\n", top->n);
+		top = top->next;
 	}
+	free_dlistint(*stack);
 }

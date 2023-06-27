@@ -9,9 +9,7 @@ char *str_value = NULL;
 int main(int argc, char *argv[])
 {
 	FILE *file;
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t read;
+	char line[256];
 	unsigned int line_number = 0;
 	char *opcode;
 	stack_t *stack = NULL;
@@ -27,18 +25,16 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
-	while ((read = getline(&line, &len, file)) != -1)
+	while(fgets(line, sizeof(line), file) != NULL)
 	{
 		line_number++;
-		str_value = strtok(line, " \n\t");
+		str_value = strtok(line, " \t\n");
 		opcode = str_value;
+		printf("%s %s\n", str_value, opcode);
 		if (opcode == NULL || opcode[0] == '#')
-			continue;
+			printf("Okay");
 		str_value = strtok(NULL, " \t\n");
 		exec_instruct(opcode, &stack, line_number);
-		free(line);
-		line = NULL;
-		len = 0;
 	}
 	fclose(file);
 	return (0);
